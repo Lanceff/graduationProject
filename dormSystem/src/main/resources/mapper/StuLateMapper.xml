@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.dao.StuLateMapper">
+  <resultMap id="BaseResultMap" type="com.hui.pojo.StuLate">
+    <id column="bsl_id" jdbcType="INTEGER" property="bslId" />
+    <result column="ban_id" jdbcType="INTEGER" property="banId" />
+    <result column="bsl_date" jdbcType="DATE" property="bslDate" />
+    <result column="bsl_stu_id" jdbcType="VARCHAR" property="bslStuId" />
+    <result column="bsl_desc" jdbcType="VARCHAR" property="bslDesc" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    bsl_id, ban_id, bsl_date, bsl_stu_id, bsl_desc
+  </sql>
+  
+  <insert id="insertStuLate" parameterType="java.util.Map">
+    insert into stulate (ban_id,bsl_date,bsl_stu_id)
+    	values (#{banId,jdbcType=INTEGER},date_format(now(),"%Y-%m-%d"),#{bslStuId,jdbcType=VARCHAR})
+  </insert>
+
+  <select id="selectBanAll" parameterType="java.lang.Integer" resultType="com.hui.pojo.StuLateUtil">
+  	select  stulate.bsl_stu_id bsl_stu_id,
+  			stuinfo.stu_name stu_name,
+  			date_format(stulate.bsl_date,'%Y-%m-%d') bsl_date,
+  			stuinfo.stu_dorm_id stu_dorm_id 
+    from stulate,stuinfo 
+    where ban_id = #{banId,jdbcType=INTEGER} 
+    and stulate.bsl_stu_id = stuinfo.stu_id
+    order by stulate.bsl_date desc
+  </select>
+  
+  <select id="selectByBanIdAndDate" parameterType="java.util.Map" resultType="com.hui.pojo.StuLateUtil">
+  		select stulate.bsl_stu_id bsl_stu_id,
+  			   stuinfo.stu_name stu_name,
+  		       date_format(stulate.bsl_date,'%Y-%m-%d') bsl_date,
+  			   stuinfo.stu_dorm_id stu_dorm_id
+  		from stulate,stuinfo  
+  		where ban_id = #{banId,jdbcType=INTEGER} and bsl_date = STR_TO_DATE(#{bslDate},'%Y-%m-%d')
+  		and stulate.bsl_stu_id = stuinfo.stu_id
+  		order by stulate.bsl_date desc
+  </select>
+  
+  <select id="selectAllByStuId" parameterType="java.util.Map" resultType="com.hui.pojo.StuLateUtil">
+  	select  stulate.bsl_stu_id bsl_stu_id,
+  			stuinfo.stu_name stu_name,
+  			date_format(stulate.bsl_date,'%Y-%m-%d') bsl_date,
+  			stuinfo.stu_dorm_id stu_dorm_id 
+    from stulate,stuinfo 
+    where ban_id = #{banId,jdbcType=INTEGER} 
+    and stulate.bsl_stu_id = stuinfo.stu_id
+    and stulate.bsl_stu_id = #{stuId}
+    order by stulate.bsl_date desc
+  </select>
+  
+  <select id="selectByBanIdAndDateAndStuId" parameterType="java.util.Map" resultType="com.hui.pojo.StuLateUtil">
+  		select stulate.bsl_stu_id bsl_stu_id,
+  			   stuinfo.stu_name stu_name,
+  		       date_format(stulate.bsl_date,'%Y-%m-%d') bsl_date,
+  			   stuinfo.stu_dorm_id stu_dorm_id
+  		from stulate,stuinfo  
+  		where ban_id = #{banId,jdbcType=INTEGER} and bsl_date = STR_TO_DATE(#{bslDate},'%Y-%m-%d')
+  		and stulate.bsl_stu_id = stuinfo.stu_id
+  		and stulate.bsl_stu_id = #{stuId}
+  		order by stulate.bsl_date desc
+  </select>
+  
+   <select id="selectCountStuLate" parameterType="java.lang.String" resultType="java.lang.Integer"> 
+    select count(*) from stulate where bsl_stu_id = #{stuId} and bsl_date = date_format(now(),'%Y-%m-%d')
+  </select>
+  
+</mapper>

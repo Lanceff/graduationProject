@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.dao.BanMapper">
+
+  <resultMap id="BaseResultMap" type="com.hui.pojo.Ban">
+    <id column="ban_id" jdbcType="VARCHAR" property="banId" />
+    <result column="ban_type" jdbcType="CHAR" property="banType" />
+    <result column="ban_staff_id" jdbcType="VARCHAR" property="banStaffId" />
+    <result column="ban_room_num" jdbcType="INTEGER" property="banRoomNum" />
+    <result column="ban_desc" jdbcType="VARCHAR" property="banDesc" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ban_id, ban_type, ban_staff_id, ban_room_num,ban_desc
+  </sql>
+ 
+  <insert id="insert" parameterType="com.hui.pojo.Ban">
+    insert into baninfo (ban_id, ban_type, ban_staff_id,ban_room_num, ban_desc)
+    values (#{banId,jdbcType=VARCHAR}, #{banType,jdbcType=CHAR}, #{banStaffId,jdbcType=VARCHAR}, 
+      #{banRoomNum,jdbcType=INTEGER}, #{banDesc,jdbcType=VARCHAR})
+  </insert>
+  
+  <select id="banStaffIsExit" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(*) from baninfo where ban_staff_id = #{banStaffId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectCountById" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(*) from baninfo where ban_id=#{banId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOneBanById" parameterType="java.lang.String" resultType="com.hui.pojo.Ban">
+  	select * from baninfo where ban_id=#{banId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="isExitBan" parameterType="java.lang.String" resultType="java.lang.Integer">
+ 	 select count(*) from baninfo where ban_id=#{banId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getAllBan" resultType="com.hui.pojo.Ban">
+  	select * from baninfo order by ban_id
+  </select>
+  
+  
+  <select id="getBanIdByStaffId" parameterType="java.lang.String" resultType="java.lang.String">
+  	select ban_id from baninfo where ban_staff_id = #{banStaffId,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="addBan" parameterType="com.hui.pojo.Ban">
+    insert into baninfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="banId != null">
+        ban_id,
+      </if>
+      <if test="banType != null">
+        ban_type,
+      </if>
+      <if test="banStaffId != null">
+        ban_staff_id,
+      </if>
+      <if test="banRoomNum != null">
+        ban_room_num,
+      </if>
+      <if test="banDesc != null">
+        ban_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="banId != null">
+        #{banId,jdbcType=VARCHAR},
+      </if>
+      <if test="banType != null">
+        #{banType,jdbcType=CHAR},
+      </if>
+      <if test="banStaffId != null">
+        #{banStaffId,jdbcType=VARCHAR},
+      </if>
+      <if test="banRoomNum != null">
+        #{banRoomNum,jdbcType=INTEGER},
+      </if>
+      <if test="banDesc != null">
+        #{banDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteBanById" parameterType="java.lang.String">
+  	delete from baninfo where ban_id = #{banId,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="updateBan" parameterType="com.hui.pojo.Ban">
+  		update baninfo
+  	 <set>
+      <if test="banId != null">
+        ban_id = #{banId,jdbcType=VARCHAR},
+      </if>
+      <if test="banType != null">
+        ban_type =#{banType,jdbcType=CHAR},
+      </if>
+      <if test="banStaffId != null">
+        ban_staff_id = #{banStaffId,jdbcType=VARCHAR},
+      </if>
+      <if test="banRoomNum != null">
+        ban_room_num = #{banRoomNum,jdbcType=INTEGER},
+      </if>
+      <if test="banDesc != null">
+        ban_desc = #{banDesc,jdbcType=VARCHAR}
+      </if>
+    </set>
+     where ban_id = #{banId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateBanStaffInfo" parameterType="java.util.Map">
+   update baninfo set ban_staff_id = #{banStaffId}  where ban_id = #{banId}
+  </update>
+  
+  <select id="selectBanIdList" resultType="java.lang.String">
+  	select ban_id from baninfo
+  </select>
+</mapper>

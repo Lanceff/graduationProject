@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.dao.UseDataMapper">
+  <resultMap id="BaseResultMap" type="com.hui.pojo.UseData">
+    <id column="ban_id" jdbcType="VARCHAR" property="banId" />
+    <id column="dorm_id" jdbcType="VARCHAR" property="dormId" />
+    <id column="month" jdbcType="CHAR" property="month" />
+    <result column="elec_num" jdbcType="REAL" property="elecNum" />
+    <result column="water_num" jdbcType="REAL" property="waterNum" />
+    <result column="elec_price" jdbcType="REAL" property="elecPrice" />
+    <result column="elec_cost" jdbcType="REAL" property="elecCost" />
+    <result column="water_price" jdbcType="REAL" property="waterPrice" />
+    <result column="water_cost" jdbcType="REAL" property="waterCost" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ban_id, dorm_id, month, elec_num, water_num, elec_price, elec_cost, water_price, 
+    water_cost
+  </sql>
+  
+  <select id="selectAllYearByDorm" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from usedata
+    where ban_id = #{banId,jdbcType=VARCHAR}
+      and dorm_id = #{dormId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectMonthByDorm" parameterType="com.hui.pojo.UseDataKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from usedata
+    where ban_id = #{banId,jdbcType=VARCHAR}
+      and dorm_id = #{dormId,jdbcType=VARCHAR}
+      and month = #{month,jdbcType=CHAR}
+  </select>
+</mapper>

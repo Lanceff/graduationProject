@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.dao.BanVisitMapper">
+  <resultMap id="BaseResultMap" type="com.hui.pojo.BanVisit">
+    <id column="bv_id" jdbcType="INTEGER" property="bvId" />
+    <result column="ban_id" jdbcType="VARCHAR" property="banId" />
+    <result column="bv_name" jdbcType="VARCHAR" property="bvName" />
+    <result column="bv_sex" jdbcType="CHAR" property="bvSex" />
+    <result column="bv_cred_type" jdbcType="CHAR" property="bvCredType" />
+    <result column="bv_cred_code" jdbcType="VARCHAR" property="bvCredCode" />
+    <result column="bv_desc" jdbcType="VARCHAR" property="bvDesc" />
+    <result column="bv_date" jdbcType="DATE" property="bvDate" />
+    <result column="bv_intime" jdbcType="TIMESTAMP" property="bvIntime" />
+    <result column="bv_outtime" jdbcType="TIMESTAMP" property="bvOuttime" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    bv_id, ban_id, bv_name, bv_sex, bv_cred_type, bv_cred_code, bv_desc, bv_date, bv_intime, 
+    bv_outtime
+  </sql>
+  
+  <insert id="insertBanVist" parameterType="java.util.Map">
+    insert into banvisit  (ban_id, bv_name, bv_sex, bv_cred_type, bv_cred_code, bv_desc, bv_date, bv_intime)
+    values (#{banId,jdbcType=VARCHAR}, #{bvName,jdbcType=VARCHAR}, 
+      #{bvSex,jdbcType=CHAR}, 
+      #{bvCredType,jdbcType=CHAR}, 
+      #{bvCredCode,jdbcType=VARCHAR}, 
+      #{bvDesc,jdbcType=VARCHAR}, 
+      date_format(now(),'%Y-%m-%d'), 
+      now())
+  </insert>
+  
+  <select id="outTimeNullList" parameterType="java.lang.String" resultMap="BaseResultMap">
+  		select * from banvisit where ban_id = #{banId,jdbcType=VARCHAR} and bv_outtime is null order by bv_intime desc
+  </select>
+  
+  <update id="visitorLeavelOutTime" parameterType="java.lang.Integer">
+  	update banvisit set bv_outtime = now() where bv_id = #{bvId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectAllVisitInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from banvisit where bv_outtime is not null and ban_id = #{banId,jdbcType=VARCHAR} order by bv_intime desc
+  </select> 
+  
+  <select id="selectByDate" parameterType="java.util.Map" resultType="com.hui.pojo.BanVisitUtil">
+  	select ban_id, bv_name, bv_sex, bv_cred_type, bv_cred_code, bv_desc, 
+  		   date_format(bv_date,'%Y-%m-%d') as bv_date,
+  		   date_format(bv_intime,'%H:%m:%s') as bv_intime, 
+   		   date_format(bv_outtime,'%H:%m:%s') as bv_outtime
+		  	from 
+		  	banvisit where bv_outtime is not null 
+		  	and ban_id = #{banId,jdbcType=VARCHAR} 
+		  	and bv_date = STR_TO_DATE(#{bvDate},'%Y-%m-%d')
+  </select>
+  
+  <update id="updateByPrimaryKey" parameterType="com.hui.pojo.BanVisit">
+    update banvisit
+    set ban_id = #{banId,jdbcType=VARCHAR},
+      bv_name = #{bvName,jdbcType=VARCHAR},
+      bv_sex = #{bvSex,jdbcType=CHAR},
+      bv_cred_type = #{bvCredType,jdbcType=CHAR},
+      bv_cred_code = #{bvCredCode,jdbcType=VARCHAR},
+      bv_desc = #{bvDesc,jdbcType=VARCHAR},
+      bv_date = #{bvDate,jdbcType=DATE},
+      bv_intime = #{bvIntime,jdbcType=TIMESTAMP},
+      bv_outtime = #{bvOuttime,jdbcType=TIMESTAMP}
+    where bv_id = #{bvId,jdbcType=INTEGER}
+  </update>
+</mapper>

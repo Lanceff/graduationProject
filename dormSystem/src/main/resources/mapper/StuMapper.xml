@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.dao.StuMapper">
+  <resultMap id="BaseResultMap" type="com.hui.pojo.Stu">
+    <id column="stu_id" jdbcType="VARCHAR" property="stuId" />
+    <result column="stu_name" jdbcType="VARCHAR" property="stuName" />
+    <result column="stu_sex" jdbcType="CHAR" property="stuSex" />
+    <result column="stu_org" jdbcType="VARCHAR" property="stuOrg" />
+    <result column="stu_xy" jdbcType="VARCHAR" property="stuXy" />
+    <result column="stu_major" jdbcType="VARCHAR" property="stuMajor" />
+    <result column="stu_nz" jdbcType="VARCHAR" property="stuNz" />
+    <result column="stu_gride" jdbcType="VARCHAR" property="stuGride" />
+    <result column="stu_tel" jdbcType="VARCHAR" property="stuTel" />
+    <result column="stu_ban_id" jdbcType="VARCHAR" property="stuBanId" />
+    <result column="stu_dorm_id" jdbcType="VARCHAR" property="stuDormId" />
+    <result column="stu_in_state" jdbcType="CHAR" property="stuInState" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    stu_id, stu_name, stu_sex, stu_org, stu_xy, stu_major, stu_nz, stu_gride, stu_tel, 
+    stu_ban_id, stu_dorm_id, stu_in_state
+  </sql>
+  
+  <select id="getStuNameById" resultType="java.lang.String" parameterType="java.lang.String">
+  	select stu_name from stuinfo where stu_id = #{stuId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectIsExitStuById" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(*) from stuinfo where stu_id = #{stuId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectAllStu" resultType="com.hui.pojo.Stu">
+  	select
+  	<include refid="Base_Column_List" />
+  	from stuinfo
+  </select>
+  
+  <select id="selectStusByBan" parameterType="java.lang.String" resultType="com.hui.pojo.Stu">
+  	select * from stuinfo where stu_ban_id = #{stuBanId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectOneByParamAndBan" parameterType="java.util.Map" resultType="com.hui.pojo.Stu">
+  	select * from stuinfo where (stu_id = #{param} or stu_name= #{param}) and stu_ban_id = #{stuBanId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectOneByParam" parameterType="java.lang.String" resultType="com.hui.pojo.Stu">
+  	select * from stuinfo where stu_id = #{param} or stu_name= #{param}
+  </select>
+  
+  <select id="selectOneStu" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from stuinfo
+    where stu_id = #{stuId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByStuId" parameterType="java.lang.String">
+    delete from stuinfo
+    where stu_id = #{stuId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.hui.pojo.Stu">
+    insert into stuinfo (stu_id, stu_name, stu_sex, 
+      stu_org, stu_xy, stu_major, 
+      stu_nz, stu_gride, stu_tel, 
+      stu_ban_id, stu_dorm_id, stu_in_state
+      )
+    values (#{stuId,jdbcType=VARCHAR}, #{stuName,jdbcType=VARCHAR}, #{stuSex,jdbcType=CHAR}, 
+      #{stuOrg,jdbcType=VARCHAR}, #{stuXy,jdbcType=VARCHAR}, #{stuMajor,jdbcType=VARCHAR}, 
+      #{stuNz,jdbcType=VARCHAR}, #{stuGride,jdbcType=VARCHAR}, #{stuTel,jdbcType=VARCHAR}, 
+      #{stuBanId,jdbcType=VARCHAR}, #{stuDormId,jdbcType=VARCHAR}, #{stuInState,jdbcType=CHAR}
+      )
+  </insert>
+  
+  <insert id="insertOneStu" parameterType="com.hui.pojo.Stu">
+    insert into stuinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stuId != null">
+        stu_id,
+      </if>
+      <if test="stuName != null">
+        stu_name,
+      </if>
+      <if test="stuSex != null">
+        stu_sex,
+      </if>
+      <if test="stuOrg != null">
+        stu_org,
+      </if>
+      <if test="stuXy != null">
+        stu_xy,
+      </if>
+      <if test="stuMajor != null">
+        stu_major,
+      </if>
+      <if test="stuNz != null">
+        stu_nz,
+      </if>
+      <if test="stuGride != null">
+        stu_gride,
+      </if>
+      <if test="stuTel != null">
+        stu_tel,
+      </if>
+      <if test="stuBanId != null">
+        stu_ban_id,
+      </if>
+      <if test="stuDormId != null">
+        stu_dorm_id,
+      </if>
+      <if test="stuInState != null">
+        stu_in_state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stuId != null">
+        #{stuId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuName != null">
+        #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="stuSex != null">
+        #{stuSex,jdbcType=CHAR},
+      </if>
+      <if test="stuOrg != null">
+        #{stuOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="stuXy != null">
+        #{stuXy,jdbcType=VARCHAR},
+      </if>
+      <if test="stuMajor != null">
+        #{stuMajor,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNz != null">
+        #{stuNz,jdbcType=VARCHAR},
+      </if>
+      <if test="stuGride != null">
+        #{stuGride,jdbcType=VARCHAR},
+      </if>
+      <if test="stuTel != null">
+        #{stuTel,jdbcType=VARCHAR},
+      </if>
+      <if test="stuBanId != null">
+        #{stuBanId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuDormId != null">
+        #{stuDormId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuInState != null">
+        #{stuInState,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateStuInfo" parameterType="com.hui.pojo.Stu">
+    update stuinfo
+    <set>
+      <if test="stuName != null">
+        stu_name = #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="stuSex != null">
+        stu_sex = #{stuSex,jdbcType=CHAR},
+      </if>
+      <if test="stuOrg != null">
+        stu_org = #{stuOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="stuXy != null">
+        stu_xy = #{stuXy,jdbcType=VARCHAR},
+      </if>
+      <if test="stuMajor != null">
+        stu_major = #{stuMajor,jdbcType=VARCHAR},
+      </if>
+      <if test="stuNz != null">
+        stu_nz = #{stuNz,jdbcType=VARCHAR},
+      </if>
+      <if test="stuGride != null">
+        stu_gride = #{stuGride,jdbcType=VARCHAR},
+      </if>
+      <if test="stuTel != null">
+        stu_tel = #{stuTel,jdbcType=VARCHAR},
+      </if>
+      <if test="stuBanId != null">
+        stu_ban_id = #{stuBanId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuDormId != null">
+        stu_dorm_id = #{stuDormId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuInState != null">
+        stu_in_state = #{stuInState,jdbcType=CHAR},
+      </if>
+    </set>
+    where stu_id = #{stuId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.hui.pojo.Stu">
+    update stuinfo
+    set stu_name = #{stuName,jdbcType=VARCHAR},
+      stu_sex = #{stuSex,jdbcType=CHAR},
+      stu_org = #{stuOrg,jdbcType=VARCHAR},
+      stu_xy = #{stuXy,jdbcType=VARCHAR},
+      stu_major = #{stuMajor,jdbcType=VARCHAR},
+      stu_nz = #{stuNz,jdbcType=VARCHAR},
+      stu_gride = #{stuGride,jdbcType=VARCHAR},
+      stu_tel = #{stuTel,jdbcType=VARCHAR},
+      stu_ban_id = #{stuBanId,jdbcType=VARCHAR},
+      stu_dorm_id = #{stuDormId,jdbcType=VARCHAR},
+      stu_in_state = #{stuInState,jdbcType=CHAR}
+    where stu_id = #{stuId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectStuByIdAndBan" parameterType="java.util.Map" resultType="com.hui.pojo.Stu">
+	select * from stuinfo where stu_ban_id = #{stuBanId,jdbcType=VARCHAR} and stu_id = #{stuId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getRoomMate" parameterType="java.util.Map" resultType="com.hui.pojo.Stu">
+  	select * from stuinfo where stu_ban_id = #{stuBanId,jdbcType=VARCHAR} and stu_dorm_id = #{stuDormId,jdbcType=VARCHAR}
+  </select>
+</mapper>

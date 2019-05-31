@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.dao.StaffMapper">
+  <resultMap id="BaseResultMap" type="com.hui.pojo.Staff">
+    <id column="staff_id" jdbcType="VARCHAR" property="staffId" />
+    <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+    <result column="staff_sex" jdbcType="CHAR" property="staffSex" />
+    <result column="staff_age" jdbcType="INTEGER" property="staffAge" />
+    <result column="staff_org" jdbcType="VARCHAR" property="staffOrg" />
+    <result column="staff_tel" jdbcType="VARCHAR" property="staffTel" />
+  </resultMap>
+ 
+  <sql id="BaseColumn">
+    staff_id, staff_name, staff_sex, staff_age, staff_org, staff_tel
+  </sql>
+  
+ 
+  <select id="selectNameById" parameterType="java.lang.String" resultType="java.lang.String">
+  	select staff_name from staffinfo where staff_id=#{staffId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="BaseColumn" />
+    from staffinfo
+    where staff_id = #{staffId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="createStaffId" resultType="java.lang.Integer">
+  	select max(staff_id) from staffinfo
+  </select>
+  
+  <select id="selectAllStaff" resultMap="BaseResultMap">
+  	select * from staffinfo order by staff_id
+  </select>
+  
+  <delete id="deleteStaffById" parameterType="java.lang.String">
+    delete from staffinfo
+    where staff_id = #{staffId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="addStaff" parameterType="com.hui.pojo.Staff">
+    insert into staffinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="staffId != null">
+        staff_id,
+      </if>
+      <if test="staffName != null">
+        staff_name,
+      </if>
+      <if test="staffSex != null">
+        staff_sex,
+      </if>
+      <if test="staffAge != null">
+        staff_age,
+      </if>
+      <if test="staffOrg != null">
+        staff_org,
+      </if>
+      <if test="staffTel != null">
+        staff_tel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="staffId != null">
+        #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null">
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffSex != null">
+        #{staffSex,jdbcType=CHAR},
+      </if>
+      <if test="staffAge != null">
+        #{staffAge,jdbcType=INTEGER},
+      </if>
+      <if test="staffOrg != null">
+        #{staffOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="staffTel != null">
+        #{staffTel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateStaff" parameterType="com.hui.pojo.Staff">
+    update staffinfo
+    <set>
+      <if test="staffName != null">
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffSex != null">
+        staff_sex = #{staffSex,jdbcType=CHAR},
+      </if>
+      <if test="staffAge != null">
+        staff_age = #{staffAge,jdbcType=INTEGER},
+      </if>
+      <if test="staffOrg != null">
+        staff_org = #{staffOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="staffTel != null">
+        staff_tel = #{staffTel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where staff_id = #{staffId,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateById" parameterType="com.hui.pojo.Staff">
+    update staffinfo
+    set staff_name = #{staffName,jdbcType=VARCHAR},
+      staff_sex = #{staffSex,jdbcType=CHAR},
+      staff_age = #{staffAge,jdbcType=INTEGER},
+      staff_org = #{staffOrg,jdbcType=VARCHAR},
+      staff_tel = #{staffTel,jdbcType=VARCHAR}
+    where staff_id = #{staffId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectStaffByBanId" parameterType="java.lang.String" resultType="com.hui.pojo.Staff">
+  	select  distinct
+  	  a.staff_id staff_id,
+	  a.staff_name staff_name,
+	  a.staff_sex staff_sex, 
+	  a.staff_age staff_age, 
+	  a.staff_org staff_org, 
+	  a.staff_tel staff_tel
+  	from staffinfo a,stuinfo b,baninfo c 
+  	where
+    b.stu_ban_id = c.ban_id 
+  	and a.staff_id = c.ban_staff_id 
+  	and b.stu_ban_id = #{banId}
+  </select>
+</mapper>

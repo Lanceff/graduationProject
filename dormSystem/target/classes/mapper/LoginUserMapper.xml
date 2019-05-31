@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.dao.LoginUserMapper">
+  <resultMap id="BaseResultMap" type="com.hui.pojo.LoginUser">
+    <id column="usercode" jdbcType="VARCHAR" property="usercode" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="identity" jdbcType="CHAR" property="identity" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    usercode, password, identity
+  </sql>
+  
+ <select id="login" parameterType="com.hui.pojo.LoginUser" resultMap="BaseResultMap">
+ 	select 
+ 	<include refid="Base_Column_List" />
+ 	 from loginuser 
+ 	 where binary usercode = #{usercode,jdbcType=VARCHAR} 
+ 	 and binary password=#{password,jdbcType=VARCHAR} 
+ 	 and identity=#{identity,jdbcType=CHAR}
+ </select>
+  
+  <select id="selectByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from loginuser
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByCode" parameterType="java.lang.String">
+    delete from loginuser
+    where usercode = #{usercode,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertStaffToLoginTable" parameterType="java.lang.String">
+    insert into loginuser (usercode, password, identity)
+    values (#{usercode,jdbcType=VARCHAR}, #{usercode,jdbcType=VARCHAR}, '2')
+  </insert>
+  
+   <insert id="insertStuToLoginTable" parameterType="java.lang.String">
+    insert into loginuser (usercode, password, identity)
+    values (#{usercode,jdbcType=VARCHAR}, #{usercode,jdbcType=VARCHAR}, '3')
+  </insert>
+  
+  <update id="changePassword" parameterType="com.hui.pojo.LoginUser">
+  		update loginuser set password=#{password,jdbcType=VARCHAR} where usercode = #{usercode,jdbcType=VARCHAR} 
+  		and identity=#{identity,jdbcType=CHAR}
+  </update>
+</mapper>

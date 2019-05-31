@@ -1,0 +1,17 @@
+[genuitec-file-id="wc2-3"],[genuitec-lp-path="/dormSystem/src/main/webapp/util/DatePicker/skin/WdatePicker.css"],[genuitec-lp-enabled=false]{
+  /* for codelive */
+}
+
+[genuitec-file-id="wc2-0"],[genuitec-lp-path="/DormitoryManage/WebContent/DatePicker/skin/WdatePicker.css"],[genuitec-lp-enabled=false]{
+  /* for codelive */
+}
+
+.Wdate{
+	background:#fff url(datePicker.gif) no-repeat right;
+}
+.Wdate::-ms-clear{display:none;}
+
+.WdateFmtErr{
+	font-weight:bold;
+	color:red;
+}
