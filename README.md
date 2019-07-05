@@ -1,2 +1,2 @@
-# myProject
-大学毕设
+# dormSystem
+ssm + maven
